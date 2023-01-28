@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken");
 
 // * for accessing by admin only
 
-routes.get("/users", authenticationToken, async (req, res) => {
+module.exports.getAllUser = async (req, res) => {
   // let user = await User.findOne({username: req.user.username})
   try {
     const user = await User.find();
@@ -18,14 +18,14 @@ routes.get("/users", authenticationToken, async (req, res) => {
   } catch (err) {
     res.send("Error", err);
   }
-});
+};
 
-routes.get("/user", authenticationToken, async (req, res) => {
+module.exports.getUser = async (req, res) => {
   let user = await User.findOne({ firstName: req.user.firstName });
   res.send(user);
-});
+};
 
-routes.post("/signUP", async (req, res) => {
+module.exports.singUp = async (req, res) => {
   let firstName = req.body.firstName;
   let lastName = req.body.lastName;
   let mobileNumber = req.body.mobileNumber;
@@ -51,9 +51,9 @@ routes.post("/signUP", async (req, res) => {
     console.log(error);
     res.send("Some error occured");
   }
-});
+};
 
-routes.post("/signIn", async (req, res) => {
+module.exports.signIn = async (req, res) => {
   let email = req.body.email;
   console.log(req.body);
   // let password = req.body.password
@@ -72,9 +72,9 @@ routes.post("/signIn", async (req, res) => {
     console.log(err);
     res.send("Wrong Password");
   }
-});
+};
 
-routes.get("/logout", authenticationToken, async function (req, res) {
+module.exports.logout = async function (req, res) {
   const authHeader = req.headers.auth_token;
   const logout = new blacklisttoken({
     token: authHeader,
@@ -92,6 +92,4 @@ routes.get("/logout", authenticationToken, async function (req, res) {
   // else{
   //     res.send('error',err)
   // }
-});
-
-module.exports = routes;
+};
