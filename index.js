@@ -21,11 +21,10 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true },(err,d
 });
 
 
-const port = process.env.PORT || 8000 ;
+// If modifying these scopes, delete token.json.
 
-app.listen(8000,()=>{
+const port = process.env.PORT || 8000;
 
-    console.log(
-        "Application started at the server side"
-    );
-})
+app.listen(8000, () => {
+  console.log("Application started at the server side");
+});
