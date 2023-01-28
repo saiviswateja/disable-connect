@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const crypto = require('crypto');
 
 const userSchema = mongoose.Schema({
     firstName:{
@@ -31,3 +30,5 @@ const userSchema = mongoose.Schema({
         required:true
     }
 });
+
+module.exports =  mongoose.model('User', userSchema);

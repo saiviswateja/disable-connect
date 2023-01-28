@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const userRouter = require('./routes/users/User');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -9,13 +10,16 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/user',userRouter);
 
-// mongoose.connect('mongodb://localhost:27017/amazon',{useNewUrlParser:true,useUnifiedTopology:true},(err,db)=>{
-//     if(err){
-//         console.log("Error connecting the db");
-//         return;
-//     }
-//     console.log("database connected");
-// });
+const uri = 'mongodb+srv://hackuser:LFH4ubZBXZaaWK9i@cluster0.fvgxptl.mongodb.net/?retryWrites=true&w=majority';
+
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true },(err,db)=>{
+    if(err){
+        console.log("Error connecting the db");
+        return;
+    }
+    console.log("database connected");
+});
+
 
 const port = process.env.PORT || 8000 ;
 
