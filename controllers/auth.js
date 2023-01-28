@@ -5,60 +5,50 @@ const authenticationToken = require("../middleware/auth");
 const express = require("express");
 const routes = express.Router();
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
+const userCred = require("../models/userCred");
 const jwt = require("jsonwebtoken");
 
 // * for accessing by admin only
 
-module.exports.getAllUser = async (req, res) => {
-  // let user = await User.findOne({username: req.user.username})
-  try {
-    const user = await User.find();
-    res.json(user);
-  } catch (err) {
-    res.send("Error", err);
-  }
-};
+// module.exports.getAllUser = async (req, res) => {
+//   // let user = await User.findOne({username: req.user.username})
+//   try {
+//     const user = await userCred.find();
+//     res.json(user);
+//   } catch (err) {
+//     res.send("Error", err);
+//   }
+// };
 
-module.exports.getUser = async (req, res) => {
-  let user = await User.findOne({ firstName: req.user.firstName });
-  res.send(user);
-};
+// module.exports.getUser = async (req, res) => {
+//   let user = await userCred.findOne({ firstName: req.user.firstName });
+//   res.send(user);
+// };
 
 module.exports.singUp = async (req, res) => {
-  let firstName = req.body.firstName;
-  let lastName = req.body.lastName;
-  let mobileNumber = req.body.mobileNumber;
+  let name = req.body.name;
   let email = req.body.email;
   let password = req.body.password;
-  let emergencyContact = req.body.emergencyContact;
-  console.log(firstName + lastName);
-
   console.log({
-    firstName,
-    lastName,
+    name,
     email,
-    mobileNumber,
-    emergencyContact,
     password,
   });
 
   try {
-    let user = await User.findOne({ email: email });
+    let user = await userCred.findOne({ email: email });
     if (user) {
       return res.send("Email already exist");
     }
     password = await bcrypt.hash(password, 10);
-    user = await User.create({
+    user = await userCred.create({
       firstName,
       lastName,
       email,
-      mobileNumber,
-      emergencyContact,
       password,
     });
 
-    user = await user.save();
+    user = await userCred.save();
     res.json(user);
   } catch (error) {
     console.log(error);
@@ -70,7 +60,7 @@ module.exports.signIn = async (req, res) => {
   let email = req.body.email;
   console.log(req.body);
   // let password = req.body.password
-  let user = await User.findOne({ email: email });
+  let user = await userCred.findOne({ email: email });
   if (!user) {
     return res.send("Email not registered");
   }
@@ -99,11 +89,4 @@ module.exports.logout = async function (req, res) {
   } else {
     res.send("error", err);
   }
-
-  // if(logout){
-  //     res.send("You have been Logout")
-  // }
-  // else{
-  //     res.send('error',err)
-  // }
 };
