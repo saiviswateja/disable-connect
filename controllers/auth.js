@@ -1,11 +1,11 @@
 const { Router } = require("express");
 require("dotenv").config();
-const blacklisttoken = require("../models/token");
+// const blacklisttoken = require("../models/token");
 const authenticationToken = require("../middleware/auth");
 const express = require("express");
 const routes = express.Router();
 const bcrypt = require("bcrypt");
-const User = require("../models/patientRecords");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 // * for accessing by admin only
@@ -31,20 +31,33 @@ module.exports.singUp = async (req, res) => {
   let mobileNumber = req.body.mobileNumber;
   let email = req.body.email;
   let password = req.body.password;
+  let emergencyContact = req.body.emergencyContact;
   console.log(firstName + lastName);
+
+  console.log({
+    firstName,
+    lastName,
+    email,
+    mobileNumber,
+    emergencyContact,
+    password,
+  });
 
   try {
     let user = await User.findOne({ email: email });
     if (user) {
       return res.send("Email already exist");
     }
-    user = new User({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      mobileNumber: mobileNumber,
-      password: password,
+    password = await bcrypt.hash(password, 10);
+    user = await User.create({
+      firstName,
+      lastName,
+      email,
+      mobileNumber,
+      emergencyContact,
+      password,
     });
+
     user = await user.save();
     res.json(user);
   } catch (error) {
@@ -62,7 +75,8 @@ module.exports.signIn = async (req, res) => {
     return res.send("Email not registered");
   }
   try {
-    if (await bcrypt.compare(req.body.password, user.email)) {
+    console.log("password is ----->", user);
+    if (await bcrypt.compare(req.body.password, user.password)) {
       user = { email: email };
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
       res.json({ accessToken: accessToken });
