@@ -21,28 +21,28 @@ routes.get("/users", authenticationToken, async (req, res) => {
 });
 
 routes.get("/user", authenticationToken, async (req, res) => {
-  let user = await User.findOne({ username: req.user.username });
+  let user = await User.findOne({ firstName: req.user.firstName });
   res.send(user);
 });
 
 routes.post("/signUP", async (req, res) => {
-  let username = req.body.username;
+  let firstName = req.body.firstName;
+  let lastName = req.body.lastName;
+  let mobileNumber = req.body.mobileNumber;
   let email = req.body.email;
   let password = req.body.password;
-  console.log(username);
+  console.log(firstName + lastName);
 
   try {
-    let user = await User.findOne({ username: username });
+    let user = await User.findOne({ email: email });
     if (user) {
-      return res.send("User already exist");
-    }
-    user = await User.findOne({ email: email });
-    if (user) {
-      return res.send("email already exist");
+      return res.send("Email already exist");
     }
     user = new User({
-      username: username,
+      firstName: firstName,
+      lastName: lastName,
       email: email,
+      mobileNumber: mobileNumber,
       password: password,
     });
     user = await user.save();
@@ -54,16 +54,16 @@ routes.post("/signUP", async (req, res) => {
 });
 
 routes.post("/signIn", async (req, res) => {
-  let username = req.body.username;
+  let email = req.body.email;
   console.log(req.body);
   // let password = req.body.password
-  let user = await User.findOne({ username: username });
+  let user = await User.findOne({ email: email });
   if (!user) {
-    return res.send("No user registered");
+    return res.send("Email not registered");
   }
   try {
-    if (await bcrypt.compare(req.body.password, user.password)) {
-      user = { username: username };
+    if (await bcrypt.compare(req.body.password, user.email)) {
+      user = { email: email };
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
       res.json({ accessToken: accessToken });
       // res.send('success')
