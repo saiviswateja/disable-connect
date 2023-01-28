@@ -8,23 +8,6 @@ const bcrypt = require("bcrypt");
 const userCred = require("../models/userCred");
 const jwt = require("jsonwebtoken");
 
-// * for accessing by admin only
-
-// module.exports.getAllUser = async (req, res) => {
-//   // let user = await User.findOne({username: req.user.username})
-//   try {
-//     const user = await userCred.find();
-//     res.json(user);
-//   } catch (err) {
-//     res.send("Error", err);
-//   }
-// };
-
-// module.exports.getUser = async (req, res) => {
-//   let user = await userCred.findOne({ firstName: req.user.firstName });
-//   res.send(user);
-// };
-
 module.exports.singUp = async (req, res) => {
   let name = req.body.name;
   let email = req.body.email;
@@ -47,7 +30,8 @@ module.exports.singUp = async (req, res) => {
       email,
       password,
     });
-
+    accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+    user.accessToken;
     user = await userCred.save();
     res.json(user);
   } catch (error) {
@@ -59,7 +43,6 @@ module.exports.singUp = async (req, res) => {
 module.exports.signIn = async (req, res) => {
   let email = req.body.email;
   console.log(req.body);
-  // let password = req.body.password
   let user = await userCred.findOne({ email: email });
   if (!user) {
     return res.send("Email not registered");
@@ -68,7 +51,9 @@ module.exports.signIn = async (req, res) => {
     console.log("password is ----->", user);
     if (await bcrypt.compare(req.body.password, user.password)) {
       user = { email: email };
-      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: process.env.expiresIn,
+      });
       res.json({ accessToken: accessToken });
       // res.send('success')
     }
@@ -79,14 +64,8 @@ module.exports.signIn = async (req, res) => {
 };
 
 module.exports.logout = async function (req, res) {
-  const authHeader = req.headers.auth_token;
-  const logout = new blacklisttoken({
-    token: authHeader,
+  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "0d",
   });
-  await logout.save();
-  if (logout) {
-    res.send("You have been Logout");
-  } else {
-    res.send("error", err);
-  }
+  res.send("Logout successfully");
 };
