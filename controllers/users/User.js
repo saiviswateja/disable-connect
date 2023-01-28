@@ -1,8 +1,9 @@
+const { use } = require("express/lib/application");
 const User = require("../../models/User");
 
 exports.SignUp = async(req,res)=>{
-    const {firstname, lastname, mobileNumber,email,emergencyContact,typeOfDisability,age} = req.body
-    
+    const {firstname, lastname, mobileNumber,email,emergencyContact,typeOfDisability,age} = req.body;
+
     // User.find({email:req.body.email},(err,userWithEmail)=>{
     //     if(err){
     //         return res.json({
@@ -30,7 +31,17 @@ exports.SignUp = async(req,res)=>{
     //     }
     // })
 
-    await user.save((err,user)=>{
+    const userDetails = {
+        firstName:firstname,
+        lastName:lastname,
+        mobileNumber:mobileNumber,
+        email:email,
+        emergencyContact:emergencyContact,
+        typeOfDisability: typeOfDisability,
+        age:age
+    }
+    const user = new User(userDetails);
+    user.save((err,userDetails)=>{
         if(err){
             console.log(err)
             return res.json({
@@ -38,7 +49,7 @@ exports.SignUp = async(req,res)=>{
                 success:false
             })
         }
-        return res.send(user);
+        return res.send(userDetails);
     })
     return res.send("its working");
 }
