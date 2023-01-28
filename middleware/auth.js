@@ -1,5 +1,5 @@
 require("dotenv").config();
-const blacklisttoken = require("../models/token");
+
 const jwt = require("jsonwebToken");
 
 async function authenticationToken(req, res, next) {

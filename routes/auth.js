@@ -1,8 +1,8 @@
 const express = require("express");
-const routes = express.Router();
+const router = express.Router();
 const authController = require("../controllers/auth");
 const auth = require("../middleware/auth");
-const router = require("./users/User");
+// const router = require("./users/User");
 
 router.get("/users", auth, authController.getAllUser);
 router.get("/user", auth, authController.getAllUser);
