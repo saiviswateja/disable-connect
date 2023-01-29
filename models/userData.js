@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema(
         enum: ["Male", "Female"],
       },
     },
+    foodHistoty: {
+      type: Array,
+      default: []
+    }
   },
   { timestamps: true }
 );

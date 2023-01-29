@@ -2,6 +2,7 @@ require("dotenv").config();
 const bcrypt = require("bcrypt");
 const userCred = require("../models/userCred");
 const jwt = require("jsonwebtoken");
+const userData = require("../models/userData");
 
 module.exports.singUp = async (req, res) => {
   let name = req.body.name;
@@ -31,6 +32,46 @@ module.exports.singUp = async (req, res) => {
     res.send("Some error occured", error.message);
   }
 };
+
+module.exports.addUserData = async (req, res) => {
+  let email = req.body.email;
+  let weight = req.body.weight;
+  let height = req.body.height;
+  let age = req.body.age;
+  let calories = 0;
+  let gender = req.body.gender;
+  let foodHistoty = [];
+  console.log({
+    email,
+    weight,
+    height,
+    age,
+    calories,
+    gender,
+    foodHistoty
+  });
+
+  try {
+    let user = await userData.findOne({ email: email });
+    if (user) {
+      return res.send("User Data already exist");
+    }
+    user = new userData({
+      email,
+      weight,
+      height,
+      age,
+      calories,
+      gender,
+      foodHistoty
+    });
+    let accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET);
+    await user.save().then(() => res.status(200).json({ user, accessToken }));
+  } catch (error) {
+    console.log(error);
+    res.send("Some error occured", error.message);
+  }
+}
 
 module.exports.signIn = async (req, res) => {
   let email = req.body.email;

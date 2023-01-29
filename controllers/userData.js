@@ -32,7 +32,7 @@ module.exports.updateProfile = async (req, res) => {
 module.exports.getMaintananceCalories = async (req, res) => {
   let { weight, height, age, gender } = req.body.user;
   var bmr = null;
-  if(gender==="male") {
+  if(gender==="Male") {
     bmr = ( 10 * weight ) + (6.25 * height) - (5 * age) + 5;
   } else {
     bmr = ( 10 * weight ) + (6.25 * height) - (5 * age) - 161;
@@ -53,4 +53,15 @@ module.exports.getMaintananceCalories = async (req, res) => {
   return res.json({
     "maintananceCalories" : maintainanceCalories 
   });
+}
+
+module.exports.getAllUsers = async (req, res) => {
+  let users;
+  try {
+     users = await userData.find();
+  } catch(err) {
+    console.log(err);
+  }
+  console.log(users);
+  res.json(users);
 }
