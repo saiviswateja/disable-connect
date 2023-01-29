@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { response } = require('express');
 const userData = require('../models/userData');
 
 exports.getFoodWithCalories = async (req, res) => {
@@ -25,6 +26,33 @@ exports.getFoodWithCalories = async (req, res) => {
 
 exports.addFoodAuditToUser = async (req, res) => {
     //Not requiered will be taken by front end directly, it just need to update the entity
+    let { weight, height, age, calories, gender, email,foodHistory, burnedCalories } = req.body.user;
+    let foodItem = req.body.foodItem;
+    calories.push(foodItem.calories);
+    foodHistory.push(foodItem);
+  try {
+    let user = await userData.findById({ _id: req.body.user._id });
+    if (!user) {
+      user = await userData.create({
+        email,
+        weight,
+        height,
+        age,
+        calories,
+        gender,
+        foodHistory,
+        burnedCalories
+      });
+      user = await user.save();
+      res.json(user);
+    } else {
+      userSaved =  await userData.findByIdAndUpdate( {_id: req.body.user._id}, {calories, foodHistory});
+      res.json(userSaved);
+    }
+  } catch (error) {
+    console.log(error);
+    res.send("Some error occured");
+  }
 }
 
 exports.getTotalAuditCalories = async (req, res) => {

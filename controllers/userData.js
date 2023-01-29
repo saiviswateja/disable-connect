@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const { rawListeners } = require("../models/userCred");
 
 module.exports.updateProfile = async (req, res) => {
-  let { weight, height, age, calories, gender, email,foodHistory } = req.body;
+  let { weight, height, age, calories, gender, email,foodHistory, burnedCalories } = req.body;
   console.log(req.body);
 
   try {
@@ -17,13 +17,14 @@ module.exports.updateProfile = async (req, res) => {
         age,
         calories,
         gender,
-        foodHistory
+        foodHistory,
+        burnedCalories
       });
       userSaved = await user.save();
       res.json(user);
     } else {
       updateobj = { ...req.body };
-      userSaved = await user.save();
+      userSaved =  await userData.findByIdAndUpdate(user.email, user);
       console.log(userSaved);
       res.json(userSaved);
     }

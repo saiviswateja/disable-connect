@@ -23,19 +23,24 @@ const userSchema = new mongoose.Schema(
     },
     calories: [
       {
-        type: String,
+        type: Number,
         required: true,
-      },
+        default: 0
+      }
     ],
     gender: {
       type: {
         type: String,
         enum: ["Male", "Female"],
-      },
+      }
     },
     foodHistory: {
       type: Array,
       default: []
+    },
+    burnedCalories: {
+      type: Number,
+      required: false
     }
   },
   { timestamps: true }

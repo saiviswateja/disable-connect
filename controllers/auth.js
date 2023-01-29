@@ -38,9 +38,10 @@ module.exports.addUserData = async (req, res) => {
   let weight = req.body.weight;
   let height = req.body.height;
   let age = req.body.age;
-  let calories = 0;
   let gender = req.body.gender;
   let foodHistory = [];
+  let calories = [];
+  let burnedCalories = 0;
   console.log({
     email,
     weight,
@@ -48,7 +49,8 @@ module.exports.addUserData = async (req, res) => {
     age,
     calories,
     gender,
-    foodHistory
+    foodHistory,
+    burnedCalories
   });
 
   try {

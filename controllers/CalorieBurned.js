@@ -8,13 +8,18 @@ exports.getCaloriesBurned = async (req, res) => {
             'X-Api-Key': process.env.CALORIE_BURNED_API_KEY
         }
       };
-    const url = 'https://api.api-ninjas.com/v1/caloriesburned?activity=' + activity;
-    axios.get(url, config)
-        .then(response => {
-            console.log(response);
-            return res.json(response.data);
-        })
-        .catch(error => {
-            console.log(error);
-        });
+    // const url = 'https://api.api-ninjas.com/v1/caloriesburned?activity=' + activity;
+    // const response = async () => {
+    //     const response = await axios.get(
+    //         url, config
+    //     );
+    //     return response;
+    // };
+    // console.log(response.data);
+    // let calories = 20;
+    // if(response!=null && response.data[0]!=null) {
+    //     calories = response.data[0].calories_per_hour;
+    // }
+    // console.log(calories);
+    
 }
