@@ -3,10 +3,16 @@ const validator = require("validator");
 
 const userSchema = new mongoose.Schema(
   {
-    weight: {
-      type: Number,
+    email: {
+      type: String,
       required: true,
     },
+    weight: [
+      {
+        type: Number,
+        required: true,
+      },
+    ],
     height: {
       type: Number,
       required: true,
@@ -20,6 +26,12 @@ const userSchema = new mongoose.Schema(
       ref: "userCred",
       required: true,
     },
+    calories: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
     gender: {
       type: {
         type: String,

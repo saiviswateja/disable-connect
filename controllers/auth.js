@@ -1,9 +1,4 @@
-const { Router } = require("express");
 require("dotenv").config();
-// const blacklisttoken = require("../models/token");
-const authenticationToken = require("../middleware/auth");
-const express = require("express");
-const routes = express.Router();
 const bcrypt = require("bcrypt");
 const userCred = require("../models/userCred");
 const jwt = require("jsonwebtoken");
