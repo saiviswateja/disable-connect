@@ -24,9 +24,7 @@ exports.getFoodWithCalories = async (req, res) => {
 }
 
 exports.addFoodAuditToUser = async (req, res) => {
-    //Adding the food with calories to user
-    //From request send both user and food
-    
+    //Not requiered will be taken by front end directly, it just need to update the entity
 }
 
 exports.getTotalAuditCalories = async (req, res) => {

@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
         enum: ["Male", "Female"],
       },
     },
-    foodHistoty: {
+    foodHistory: {
       type: Array,
       default: []
     }

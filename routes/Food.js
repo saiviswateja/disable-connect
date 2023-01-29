@@ -4,4 +4,6 @@ const foodController = require("../controllers/Food");
 
 router.post('/calories', foodController.getFoodWithCalories);
 
+router.post('/addCalorie', foodController.addFoodAuditToUser);
+
 module.exports = router;

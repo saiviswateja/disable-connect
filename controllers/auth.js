@@ -40,7 +40,7 @@ module.exports.addUserData = async (req, res) => {
   let age = req.body.age;
   let calories = 0;
   let gender = req.body.gender;
-  let foodHistoty = [];
+  let foodHistory = [];
   console.log({
     email,
     weight,
@@ -48,7 +48,7 @@ module.exports.addUserData = async (req, res) => {
     age,
     calories,
     gender,
-    foodHistoty
+    foodHistory
   });
 
   try {
@@ -63,7 +63,7 @@ module.exports.addUserData = async (req, res) => {
       age,
       calories,
       gender,
-      foodHistoty
+      foodHistory
     });
     let accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET);
     await user.save().then(() => res.status(200).json({ user, accessToken }));
