@@ -14,3 +14,9 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use("/", auth);
+
+app.listen(8000,()=>{
+  console.log(
+      "Application started at the server side"
+  );
+})
