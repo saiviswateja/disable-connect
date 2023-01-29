@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const auth = require("./routes/auth");
+const user = require("./routes/userData");
 const bodyParser = require("body-parser");
 const app = express();
 const connectDB = require("./config/db");
@@ -15,6 +16,7 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use("/", auth);
+app.use("/user", user);
 
 app.listen(8000, () => {
   console.log("Application started at the server side");
