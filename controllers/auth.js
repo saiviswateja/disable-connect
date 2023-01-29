@@ -19,18 +19,16 @@ module.exports.singUp = async (req, res) => {
       return res.send("Email already exist");
     }
     password = await bcrypt.hash(password, 10);
-    user = await userCred.create({
+    user = new userCred({
       name,
       email,
       password,
     });
-    accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-    user.accessToken;
-    user = await userCred.save();
-    res.json(user);
+    let accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET);
+    await user.save().then(() => res.status(200).json({ user, accessToken }));
   } catch (error) {
     console.log(error);
-    res.send("Some error occured");
+    res.send("Some error occured", error.message);
   }
 };
 
@@ -42,15 +40,17 @@ module.exports.signIn = async (req, res) => {
     return res.send("Email not registered");
   }
   try {
-    console.log("password is ----->", user);
-    if (await bcrypt.compare(req.body.password, user.password)) {
-      user = { email: email };
-      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: process.env.expiresIn,
-      });
-      res.json({ accessToken: accessToken });
-      // res.send('success')
+    console.log("above---->", req.body);
+    if (!(await bcrypt.compare(req.body.password, user.password))) {
+      console.log(req.body);
+      return res.status(404).json({ message: "wrong password" });
     }
+    user = { email: email };
+    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: process.env.expiresIn,
+    });
+    res.status(200).json({ accessToken: accessToken, user });
+    // res.send('success')
   } catch (err) {
     console.log(err);
     res.send("Wrong Password");

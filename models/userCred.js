@@ -7,12 +7,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    contactNo: {
-      type: Number,
-      required: true,
-      minLength: 10,
-      maxLength: 10,
-    },
     email: {
       type: String,
       unique: true,
@@ -26,11 +20,6 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       unique: true,
-    },
-    userData: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "userData",
-      required: true,
     },
   },
   { timestamps: true }

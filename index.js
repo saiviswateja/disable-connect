@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const connectDB = require("./config/db");
 connectDB();
+app.use(express.json());
 app.use(
   cors({
     credentials: true,
@@ -15,8 +16,6 @@ app.use(
 app.use(bodyParser.json());
 app.use("/", auth);
 
-app.listen(8000,()=>{
-  console.log(
-      "Application started at the server side"
-  );
-})
+app.listen(8000, () => {
+  console.log("Application started at the server side");
+});

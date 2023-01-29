@@ -21,11 +21,6 @@ const userSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    userCred: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "userCred",
-      required: true,
-    },
     calories: [
       {
         type: String,
