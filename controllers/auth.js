@@ -114,9 +114,7 @@ module.exports.signIn = async (req, res) => {
       return res.status(404).json({ message: "wrong password" });
     }
     user = { email: email };
-    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: process.env.expiresIn,
-    });
+    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
     res.status(200).json({ accessToken: accessToken, user });
     // res.send('success')
   } catch (err) {
