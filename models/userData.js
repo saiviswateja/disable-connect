@@ -41,6 +41,14 @@ const userSchema = new mongoose.Schema(
     burnedCalories: {
       type: Number,
       required: false
+    },
+    maintainanceCalories: {
+      type: Number,
+      required: false
+    },
+    workOuts: {
+      type: Array,
+      default: []
     }
   },
   { timestamps: true }

@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const userCred = require("../models/userCred");
 const jwt = require("jsonwebtoken");
 const userData = require("../models/userData");
+const maintananceCalories = require("../controllers/userData");
 
 module.exports.singUp = async (req, res) => {
   let name = req.body.name;
@@ -42,6 +43,28 @@ module.exports.addUserData = async (req, res) => {
   let foodHistory = [];
   let calories = [];
   let burnedCalories = 0;
+  let workOuts = [];
+  
+  var bmr = null;
+  if(gender==="Male") {
+    bmr = ( 10 * weight ) + (6.25 * height) - (5 * age) + 5;
+  } else {
+    bmr = ( 10 * weight ) + (6.25 * height) - (5 * age) - 161;
+  }
+ 
+  var phl = req.body.physicalActivityLevel;
+  var maintainanceCalories = 0;
+  if (phl==="Sedentary") {
+    maintainanceCalories = bmr * 1.55;
+  } else if (phl==="Moderately Active") {
+    maintainanceCalories = bmr * 1.85;
+  } else if (phl==="Vigorously Active") {
+    maintainanceCalories = bmr * 2.2;
+  }
+  else {
+    maintainanceCalories = bmr * 2.4;
+  }
+
   console.log({
     email,
     weight,
@@ -50,7 +73,8 @@ module.exports.addUserData = async (req, res) => {
     calories,
     gender,
     foodHistory,
-    burnedCalories
+    burnedCalories,
+    maintainanceCalories
   });
 
   try {
@@ -65,7 +89,8 @@ module.exports.addUserData = async (req, res) => {
       age,
       calories,
       gender,
-      foodHistory
+      foodHistory,
+      maintainanceCalories
     });
     let accessToken = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET);
     await user.save().then(() => res.status(200).json({ user, accessToken }));

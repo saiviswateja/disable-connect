@@ -26,11 +26,12 @@ exports.getFoodWithCalories = async (req, res) => {
 
 exports.addFoodAuditToUser = async (req, res) => {
     //Not requiered will be taken by front end directly, it just need to update the entity
-    let { weight, height, age, calories, gender, email,foodHistory, burnedCalories } = req.body.user;
+    let { weight, height, age, calories, gender, email,foodHistory, burnedCalories, maintainanceCalories } = req.body.user;
     let foodItem = req.body.foodItem;
     calories.push(foodItem.calories);
     foodHistory.push(foodItem);
-  try {
+    maintainanceCalories = maintainanceCalories - foodItem.calories;
+  try { 
     let user = await userData.findById({ _id: req.body.user._id });
     if (!user) {
       user = await userData.create({
@@ -41,12 +42,13 @@ exports.addFoodAuditToUser = async (req, res) => {
         calories,
         gender,
         foodHistory,
-        burnedCalories
+        burnedCalories,
+        maintainanceCalories
       });
       user = await user.save();
       res.json(user);
     } else {
-      userSaved =  await userData.findByIdAndUpdate( {_id: req.body.user._id}, {calories, foodHistory});
+      userSaved =  await userData.findByIdAndUpdate( {_id: req.body.user._id}, {calories, foodHistory, maintainanceCalories});
       res.json(userSaved);
     }
   } catch (error) {
