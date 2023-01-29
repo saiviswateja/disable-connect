@@ -20,8 +20,7 @@ module.exports.singUp = async (req, res) => {
     }
     password = await bcrypt.hash(password, 10);
     user = await userCred.create({
-      firstName,
-      lastName,
+      name,
       email,
       password,
     });
